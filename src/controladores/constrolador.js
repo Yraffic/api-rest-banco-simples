@@ -48,7 +48,7 @@ const atualizarConta = (req, res) => {
 
     if (!numeroconta) return res.status(400).json('numero da conta deve ser informado')
 
-    let conta = contas.find((conta) => conta.numero === numeroconta)
+    let conta = contas.find((conta) => Number(conta.numero) === Number(numeroconta))
 
     const bodyCpf = contas.find((conta) => conta.usuario.cpf === cpf)
     const bodyEmail = contas.find((conta) => conta.usuario.email === email)
@@ -71,7 +71,7 @@ const deletaConta = (req, res) => {
 
     if (!numeroconta) return res.status(400).json('numero da conta deve ser informado')
 
-    const conta = contas.find((conta) => conta.numero === numeroconta)
+    const conta = contas.find((conta) => Number(Number(conta.numero)) === Number(numeroconta))
 
     if (conta.saldo >= 1) return res.status(403).json({ mensagem: "A conta só pode ser removida se o saldo for zero!" })
 
@@ -86,7 +86,7 @@ const depositarNaConta = (req, res) => {
     if (!numero_conta) return res.status(400).json('numero da conta deve ser informado')
     if (!valor && valor <= 0) return res.status(400).json('valor deve ser informado, e não pode ser zerado ou negativo')
 
-    const conta = contas.find((conta) => conta.numero === numero_conta)
+    const conta = contas.find((conta) => Number(Number(conta.numero)) === Number(numero_conta))
 
     conta.saldo = conta.saldo + Number(valor)
 
@@ -105,7 +105,7 @@ const sacarDaConta = (req, res) => {
 
     if (!numero_conta && !senha && !valor) return res.status(400).json('todos os campos são obrigatorios')
 
-    const conta = contas.find((conta) => conta.numero === numero_conta)
+    const conta = contas.find((conta) => Number(conta.numero) === Number(numero_conta))
 
     if (conta.usuario.senha !== senha) return res.status(403).json('senha inválida')
 
@@ -127,8 +127,8 @@ const transferencia = (req, res) => {
 
     if (!numero_conta_origem && !numero_conta_destino && !valor && !senha) return res.status(401).json('todos os campos devem ser informados')
 
-    let contaDeOrigem = contas.find((conta) => conta.numero === numero_conta_origem)
-    let contaDeDestino = contas.find((conta) => conta.numero === numero_conta_destino)
+    let contaDeOrigem = contas.find((conta) => Number(conta.numero) === Number(numero_conta_origem))
+    let contaDeDestino = contas.find((conta) => Number(conta.numero) === Number(numero_conta_destino))
 
     if (!contaDeOrigem) return res.status(404).json('conta de origem não existe')
     if (!contaDeDestino) return res.status(404).json('conta de destino não existe')
@@ -156,7 +156,7 @@ const saldoBancario = (req, res) => {
 
     if (!numero_conta && !senha && !valor) return res.status(400).json('todos os campos são obrigatorios')
 
-    const conta = contas.find((conta) => conta.numero === numero_conta)
+    const conta = contas.find((conta) => Number(conta.numero) === Number(numero_conta))
 
     if (!conta) return res.status(404).json("conta não existe")
     if (conta.usuario.senha !== senha) return res.status(403).json('senha inválida')
@@ -169,20 +169,20 @@ const extrato = (req, res) => {
 
     if (!numero_conta && !senha && !valor) return res.status(400).json('todos os campos são obrigatorios')
 
-    const conta = contas.find((conta) => conta.numero === numero_conta)
+    const conta = contas.find((conta) => Number(conta.numero) === Number(numero_conta))
 
     if (!conta) return res.status(404).json("conta não existe")
     if (conta.usuario.senha !== senha) return res.status(403).json('senha inválida')
 
 
     const deposito = depositos.filter((deposito) => {
-        return deposito.numero_conta === numero_conta
+        return Number(deposito.numero_conta) === Number(numero_conta)
     })
     const transferencia = transferencias.filter((transferencia) => {
-        return transferencia.numero_conta_origem === numero_conta
+        return Number(transferencia.numero_conta_origem) === Number(numero_conta)
     })
     const retiradas = saques.filter((saque) => {
-        return saque.numero_conta === numero_conta
+        return Number(saque.numero_conta) === Number(numero_conta)
     })
 
     const extrato = {

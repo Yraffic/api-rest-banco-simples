@@ -7,7 +7,7 @@ module.exports = {
     },
     numeroConta: 3,
     contas: [{
-        "numero": "1",
+        "numero": 1,
         "saldo": 0,
         "usuario": {
             "nome": "Foo Bar",
@@ -19,7 +19,7 @@ module.exports = {
         }
     },
     {
-        "numero": "2",
+        "numero": 2,
         "saldo": 1000,
         "usuario": {
             "nome": "Foo Bar 2",
